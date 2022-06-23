@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+.bookid, .bname, .bprice {
+    margin: 10px;
+}
+
+.wrapper {
+    height: 100vh;
+}
+
+.details {
+    margin: auto;
+}
+
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    padding: 5px;
+}

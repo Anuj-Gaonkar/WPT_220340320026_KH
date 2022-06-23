@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        .bookid, .bname, .bprice {
+            margin: 10px;
+        }
+
+        .wrapper {
+            height: 100vh;
+        }
+
+        .details {
+            margin: auto;
+        }
+
+        button {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 50px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="details">
+            <div class="bookid">
+                <label for="bid">Book id</label> <br>
+                <input type="number" name="bid" id="bid" placeholder="Book ID"> <br> <span>Message: <br> <span id="msg"></span> </span> <br>
+            </div>
+
+            <div class="bname">
+                <label for="bname">Book Name</label> <br>
+                <input type="text" name="bname" id="bname" placeholder="Book Name"> <br>
+            </div>
+
+            <div class="bprice">
+                <label for="bprice">Price</label> <br>
+                <input type="number" name="bprice" id="bprice" placeholder="Price" > <br> <span>Message: <br> <span id="pmsg"></span> </span> <br>
+            </div>
+
+            <div class="btn">
+                <button id="update">Update Book</button>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(()=>{
+            console.log('Working js and HTML');
+            $('#bid').on('blur', ()=>{
+                // console.log('Blur registered');
+                let input = { bookid: $('#bid').val()}
+                // console.log(input);
+                $.ajax({
+                    data: input,
+                    url: "http://localhost:5000/bookdetails",
+                    type: 'get',
+                    datatype: 'json',
+                    success: (data)=>{
+                        // console.log(data);
+                        if (data.status){
+                            $('#msg').text('Bookid is found')
+                            $('#bname').val(data.bookname);
+                            $('#bprice').val(data.price);
+                            $('#msg').css('color', 'green');
+                            $('#update').removeAttr('disabled');
+                            // $('#bname').attr('disabled', 'disabled');
+                        } else {
+                            $('#msg').html('Bookid not found <br> Enter valid Bookid')
+                            $('#bname').val("");
+                            $('#bprice').val("");
+                            $('#msg').css('color', 'red');
+                            $('#update').attr('disabled', 'disabled');
+                        }
+                    },
+                    error: (error)=>{
+                        console.log(error);
+                    }
+                })
+            });
+
+            $('#update').on('click', ()=>{
+                // console.log('clicked');
+                let input = { bookid: $('#bid').val(), price: $('#bprice').val() };
+                $.ajax({
+                    data: input,
+                    url: "http://localhost:5000/update",
+                    type: 'get',
+                    datatype: 'json',
+                    success: (data)=>{
+                        // console.log(data);
+                        if (data.status){
+                            $('#pmsg').text('Price updated')
+                            $('#pmsg').css('color','green');
+                        } else {
+                            // $('#pmsg').html('<span style="color: red">Price not updated. Please enter valid price</span>')
+                            $('#pmsg').html('Price not updated. <br> Please enter valid price')
+                            $('#pmsg').css('color','red');
+                        }
+                    },
+                    error: (error)=>{
+                        console.log(error);
+                    }
+                })
+            });
+        })
+    </script>
+</html>
